@@ -11,11 +11,11 @@
       </div>
       <div class="gray-box">
         <div class="item-box">
-
+          <!-- 商品列表 -->
           <shop-item :key="index" v-for="item,index in goodsList" :item="item"></shop-item>
-
         </div>
       </div>
+      <prompt></prompt>
     </div>
   </div>
 </template>
@@ -23,6 +23,7 @@
 <script>
 import goodData from '@/lib/newGoodsData'
 import shopItem from '@/components/shop-item'
+import prompt from '@/components/prompt'
 
 export default {
   data () {
@@ -31,7 +32,8 @@ export default {
     }
   },
   components: {
-    shopItem
+    shopItem,
+    prompt
   }
 }
 </script>

@@ -1,11 +1,11 @@
 <template>
-  <li class="nav-cart">
-    <a href="javascript:;">购物车</a>
+  <li class="nav-cart" @mouseenter="showCar" @mouseleave="hideCar">
+    <a href="javascript:;" class="ball-rect">购物车</a>
     <!--根据class改变颜色-->
     <span class="cart-empty-num" :class="{'cart-num':totalCount>0}">
       <i>{{totalCount}}</i>
     </span>
-    <div class="nav-cart-wrapper">
+    <div class="nav-cart-wrapper"  v-if="carShow">
       <div class="nav-cart-list">
         <div class="empty" v-if="totalCount<=0">
           <h3>购物车为空</h3>
@@ -33,7 +33,7 @@
                         </h6>
                       </div>
                     </div>
-                    <div class="del-btn">删除</div>
+                    <div class="del-btn" @click="delCarPanelData(item.sku_id)">删除</div>
                   </div>
                 </div>
               </li>
@@ -49,6 +49,18 @@
         </div>
       </div>
     </div>
+    <!-- 购物车小球飞入效果 -->
+    <transition
+      name="ball"
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @after-enter="afterEnter"
+      :css="true"
+    >
+      <div class="addcart-mask" v-show="ball.show">
+        <img class="mask-item" />
+      </div>
+    </transition>
   </li>
 </template>
 
@@ -63,6 +75,44 @@ export default {
     },
     totalPrice () {
       return this.$store.getters.totalPrice
+    },
+    carShow () {
+      return this.$store.state.carShow
+    },
+    ball () {
+      return this.$store.state.ball
+    }
+  },
+  methods: {
+    delCarPanelData (id) {
+      this.$store.commit('delCarPanelData', id)
+    },
+    showCar () {
+      this.$store.commit('showCar')
+    },
+    hideCar () {
+      this.$store.commit('hideCar')
+    },
+    beforeEnter (el) {
+      /*
+        getBoundingClientRect()方法返回一个矩形对象，包含四个属性：left、top、right和bottom。分别表示元素各边与页面上边和左边的距离。
+      */
+      let rect = this.ball.getBoundingClientRect()
+      let rectEl = document.getElementsByClassName('ball-rect')[0].getBoundingClientRect() // 这里不能用ref,因为只有在挂载完成以后，才能取到$refs
+      let ball = document.getElementsByClassName('mask-item')[0]
+
+      let x = (rectEl + 16) - (rect.left + rect.width / 2)
+      let y = (rect.top + rect.height / 2) - (rect.top + 11)
+
+      el.style.transform = 'translate3d(0,' + y + 'px, 0)'
+      ball.style.transform = 'translate3d(' + x + 'px, 0, 0)'
+      ball.src = this.ball.img
+    },
+    enter () {
+
+    },
+    afterEnter () {
+
     }
   }
 }
