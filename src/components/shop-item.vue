@@ -11,14 +11,15 @@
         </ul>
       </div>
       <div class="item-btns clearfix">
-        <span class="item-gray-btn"><a href="javascript:;" target="_blank">查看详情</a> </span><span @click="addCarPanelHandle(item.sku_info[itemIndex])" class="item-blue-btn">加入购物车 </span>
+        <span class="item-gray-btn"><router-link :to="{name:'Item'}">查看详情</router-link></span>
+        <span @click="addCarPanelHandle(item.sku_info[itemIndex])" class="item-blue-btn">加入购物车 </span>
       </div>
       <div class="item-price clearfix">
         <i>¥</i><span>{{item.price}}</span>
       </div>
       <div class="discount-icon">false</div>
       <div class="item-cover">
-        <a href="javascript:;" target="_blank"></a>
+        <router-link :to="{name:'Item'}"></router-link>
       </div>
     </div>
   </div>

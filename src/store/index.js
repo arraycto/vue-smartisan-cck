@@ -10,9 +10,9 @@ let store = new Vuex.Store({
     carShow: false, // 购物车是否显示
     carTimer: null, // 收起购物车的动作是否延迟
     ball: {
-      show: false,
-      el: null, // 小球的父集
-      img: ''
+      show: false, // 小球是否显示
+      el: null, // 点击“加入购物车”的这个按钮
+      img: '' // 缩略图
     }
   },
   getters: {
@@ -35,34 +35,41 @@ let store = new Vuex.Store({
     // 天假商品至购物车
     addCarPanalData (state, data) {
       let bOff = true
-      state.carPanelData.forEach((goods) => {
-        // 如果该商品已存在购物车，则直接使商品数量加 1
-        if (goods.sku_id === data.sku_id) {
-          goods.count++
-          bOff = false
+      if (!state.ball.show) {
+        state.carPanelData.forEach((goods) => {
+          // 如果该商品已存在购物车，则直接使商品数量加 1
+          if (goods.sku_id === data.sku_id) {
+            goods.count++
+            bOff = false
 
-          if (goods.count > goods.limit_num) { // 判断是否达到最大值
-            goods.count = goods.limit_num
-            state.maxOff = true
-            return
+            if (goods.count > goods.limit_num) { // 判断是否达到最大值
+              goods.count = goods.limit_num
+              state.maxOff = true
+              return
+            }
+
+            state.carShow = true
+
+            state.ball.show = true
+            state.ball.img = data.ali_image
+            console.log(event)
+            state.ball.el = event.path[0] // 点击的“加入购物车”这个按钮
           }
+        })
 
+        // 如果商品不存在，则添加到购物车
+        if (bOff) {
+          let goodsData = data
+          Vue.set(goodsData, 'count', 1) // 给对象goodsData设置属性 count，并赋值为 1
+          state.carPanelData.push(goodsData)
           state.carShow = true
+
+          state.ball.show = true
+          state.ball.img = data.ali_image
+          console.log(event)
+          state.ball.el = event.path[0] // 点击的“加入购物车”这个按钮
         }
-      })
-
-      // 如果商品不存在，则添加到购物车
-      if (bOff) {
-        let goodsData = data
-        Vue.set(goodsData, 'count', 1) // 给对象goodsData设置属性 count，并赋值为 1
-        state.carPanelData.push(goodsData)
-        state.carShow = true
       }
-
-      state.ball.show = true
-      state.ball.img = data.ali_image
-      console.log(event)
-      state.ball.el = event.path[0]
     },
 
     // 从购物车删除商品
