@@ -6,20 +6,12 @@
           <div class="gallery">
             <div class="thumbnail">
               <ul>
-                <li class="on"><img src="../assets/img/goods/ss1.jpg"></li>
-                <li><img src="../assets/img/goods/ss2.jpg"></li>
-                <li><img src="../assets/img/goods/ss3.jpg"></li>
-                <li><img src="../assets/img/goods/ss4.jpg"></li>
-                <li><img src="../assets/img/goods/ss5.jpg"></li>
+                <li :class="{'on':index===imgIndex}" @click="tableImg(index)" v-for="img,index in itemInfo.ali_images"><img :src="img+'?x-oss-process=image/resize,w_54/quality,Q_90/format,webp'"></li>
               </ul>
             </div>
             <div class="thumb">
               <ul>
-                <li class="on"><img src="../assets/img/goods/b1.png"></li>
-                <li><img src="../assets/img/goods/b1.png"></li>
-                <li><img src="../assets/img/goods/b1.png"></li>
-                <li><img src="../assets/img/goods/b1.png"></li>
-                <li><img src="../assets/img/goods/b1.png"></li>
+                <li :class="{'on':index===imgIndex}" v-for="img,index in itemInfo.ali_images"><img :src="img+'?x-oss-process=image/resize,w_440/quality,Q_90/format,webp'"></li>
               </ul>
             </div>
           </div>
@@ -27,19 +19,21 @@
         <div class="banner">
           <div class="sku-custom-title">
             <div class="params-price">
-              <span><em>¥</em><i>199</i></span>
+              <span><em>¥</em><i>{{itemInfo.price}}</i></span>
             </div>
             <div class="params-info">
-              <h4>Smartisan 快充移动电源 10000mAh</h4>
-              <h6>10000mAh 双向快充、轻盈便携、高标准安全保护</h6>
+              <h4>{{itemInfo.title}}</h4>
+              <h6>{{itemInfo.sub_title}}</h6>
             </div>
           </div>
           <div class="sku-dynamic-params-panel">
             <div class="sku-dynamic-params clear">
               <span class="params-name">颜色</span>
               <ul class="params-colors">
-                <li class="cur">
-                  <a><i><img src="http://img01.smartisanos.cn/attr/v2/1000299/B37F37544921114CEF1EC01ED4DF44E4/20X20.jpg" /></i></a>
+                <li :class="{'cur':color.id===$route.query.itemId}" v-for="color,index in itemInfo.sku_list">
+                  <router-link :title=color.title :to="{name:'Item',query:{itemId:color.id}}">
+                    <img :src="'http://img01.smartisanos.cn/'+color.image+'20X20.jpg'" />
+                  </router-link>
                 </li>
               </ul>
             </div>
@@ -56,7 +50,7 @@
           </div>
           <div class="sku-status">
             <div class="cart-operation-wrapper clearfix">
-              <span class="blue-title-btn js-add-cart"><a>加入购物车</a></span>
+              <span class="blue-title-btn js-add-cart" @click="addCarPanelHandle"><a>加入购物车</a></span>
               <span class="gray-title-btn"><a>现在购买</a></span>
             </div>
           </div>
@@ -67,9 +61,40 @@
 </template>
 
 <script>
+import itemsData from '@/lib/newItemsData'
 
 export default {
-
+  data () {
+    return {
+      itemsData,
+      itemId: this.$route.query.itemId,
+      imgIndex: 0
+    }
+  },
+  watch: {
+    '$route.query.itemId' () { // 监控‘$route.query.itemId’是否有变化，若变化，则执行{}里面的语句
+      this.itemId = this.$route.query.itemId
+      this.imgIndex = 0
+    }
+  },
+  computed: {
+    itemInfo () {
+      let itemInfo = this.itemsData.filter((item) => { // 将itemsData中sku_id等于itemId的那个元素过滤出来，返回给itemInfo
+        return Number(item.sku_id) === Number(this.itemId)
+      })[0]
+      return itemInfo
+    }
+  },
+  methods: {
+    tableImg (index) {
+      console.log(0)
+      this.imgIndex = index
+    },
+    addCarPanelHandle () {
+      // console.log(data)
+      this.$store.commit('addCarPanalData', this.itemInfo)
+    }
+  }
 }
 </script>
 

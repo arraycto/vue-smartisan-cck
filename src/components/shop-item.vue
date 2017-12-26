@@ -11,7 +11,7 @@
         </ul>
       </div>
       <div class="item-btns clearfix">
-        <span class="item-gray-btn"><router-link :to="{name:'Item'}">查看详情</router-link></span>
+        <span class="item-gray-btn"><router-link :to="{name:'Item',query:{itemId:item.sku_info[itemIndex].sku_id}}">查看详情</router-link></span>
         <span @click="addCarPanelHandle(item.sku_info[itemIndex])" class="item-blue-btn">加入购物车 </span>
       </div>
       <div class="item-price clearfix">
@@ -19,7 +19,7 @@
       </div>
       <div class="discount-icon">false</div>
       <div class="item-cover">
-        <router-link :to="{name:'Item'}"></router-link>
+        <router-link :to="{name:'Item',query:{itemId:item.sku_info[itemIndex].sku_id}}"></router-link>
       </div>
     </div>
   </div>
