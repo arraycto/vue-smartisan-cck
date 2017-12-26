@@ -38,8 +38,8 @@ let store = new Vuex.Store({
       if (!state.ball.show) {
         state.carPanelData.forEach((goods) => {
           // 如果该商品已存在购物车，则直接使商品数量加 1
-          if (goods.sku_id === data.sku_id) {
-            goods.count++
+          if (goods.sku_id === data.info.sku_id) {
+            goods.count += data.count
             bOff = false
 
             if (goods.count > goods.limit_num) { // 判断是否达到最大值
@@ -51,7 +51,7 @@ let store = new Vuex.Store({
             state.carShow = true
 
             state.ball.show = true
-            state.ball.img = data.ali_image
+            state.ball.img = data.info.ali_image
             console.log(event)
             state.ball.el = event.path[0] // 点击的“加入购物车”这个按钮
           }
@@ -59,13 +59,13 @@ let store = new Vuex.Store({
 
         // 如果商品不存在，则添加到购物车
         if (bOff) {
-          let goodsData = data
-          Vue.set(goodsData, 'count', 1) // 给对象goodsData设置属性 count，并赋值为 1
+          let goodsData = data.info
+          Vue.set(goodsData, 'count', data.count) // 给对象goodsData设置属性 count，并赋值为 1
           state.carPanelData.push(goodsData)
           state.carShow = true
 
           state.ball.show = true
-          state.ball.img = data.ali_image
+          state.ball.img = data.info.ali_image
           console.log(event)
           state.ball.el = event.path[0] // 点击的“加入购物车”这个按钮
         }

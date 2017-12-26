@@ -43,7 +43,8 @@ export default {
     },
     addCarPanelHandle (data) {
       // console.log(data)
-      this.$store.commit('addCarPanalData', data)
+      let itemData = {info: data, count: 1}
+      this.$store.commit('addCarPanalData', itemData)
     }
   }
 }

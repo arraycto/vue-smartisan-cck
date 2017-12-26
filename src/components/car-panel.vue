@@ -436,9 +436,9 @@ export default {
     transform: translate3d(0,0,0);
   }
   .ball-enter-active{
-    transition: 1.0s cubic-bezier(.14,1.06,.73,1.09);
+    transition: .5s cubic-bezier(.14,1.06,.73,1.09);
   }
   .ball-enter-active .mask-item{
-    transition: 1.0s linear;
+    transition: .5s linear;
   }
 </style>
