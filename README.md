@@ -1,5 +1,7 @@
 # vue-smartisan-cck
 
+---------------------
+
 > A Vue.js project
 
 ## Build Setup 
